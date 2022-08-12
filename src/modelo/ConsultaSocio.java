@@ -19,12 +19,19 @@ public class ConsultaSocio extends Conexion {
     PreparedStatement ps;
     ResultSet rs;
 
-    public ArrayList<Socio> ListarSocios(ArrayList<Socio> socios) {
+    public ArrayList<Socio> ListarSocios(ArrayList<Socio> socios, String DNI, String ordenado) {
         Connection conexion = getConnection();
         try {
             conexion = getConnection();
             int contador = 0;
-            ps = conexion.prepareStatement("select * from socio;");
+            if (!"".equals(ordenado)) {                
+                ps = conexion.prepareStatement("select * from socio" + ordenado);
+            } else if ("".equals(DNI)) {
+                ps = conexion.prepareStatement("select * from socio;");
+            } else {
+                ps = conexion.prepareStatement("select * from socio where DNI =?;");
+                ps.setString(1, DNI);
+            }
             rs = ps.executeQuery();
 
             while (rs.next()) {

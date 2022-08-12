@@ -46,23 +46,33 @@ public class ControladorPagPrincipal implements ActionListener {
         ventanaInicio.jButton4.addActionListener(this);
         ventanaInicio.jButton7.addActionListener(this);
         ventanaInicio.jButton8.addActionListener(this);
+        ventanaInicio.jButton9.addActionListener(this);
+        ventanaInicio.jButton11.addActionListener(this);
+        ventanaInicio.jButton13.addActionListener(this);
+        ventanaInicio.jButton10.addActionListener(this);
+        ventanaInicio.jButton12.addActionListener(this);
     }
 
     public void inicio() {
 
-        modeloBarco.listarBarcos(barcos);
+        String matricula ="";
+        String DNI ="";
+        String ordenarBarco ="";
+        modeloBarco.listarBarcos(barcos,matricula,DNI,ordenarBarco);
         DefaultTableModel modelo = (DefaultTableModel) ventanaInicio.jTable2.getModel();
         for (int x = 0; x < barcos.size(); x++) {
             modelo.addRow(new Object[]{barcos.get(x).getMatricula(), barcos.get(x).getNombre(), barcos.get(x).getTipo(), barcos.get(x).getCapacidad(), barcos.get(x).getDNI()});
         }
-
-        modeloSocio.ListarSocios(socios);
+        String dni = "";
+        String ordena = "";
+        modeloSocio.ListarSocios(socios,dni,ordena);
         DefaultTableModel modeloTablaSocio = (DefaultTableModel) ventanaInicio.jTable1.getModel();
         for (int x = 0; x < socios.size(); x++) {
             modeloTablaSocio.addRow(new Object[]{socios.get(x).getDNI(), socios.get(x).getNombre(), socios.get(x).getApellidos(), socios.get(x).getDireccion(), socios.get(x).getTelefono(), socios.get(x).getFecha_alta()});
         }
-
-        ModeloAnclaje.ListarSocios(Anclajes);
+        String serial ="";
+        String ordenar="";
+        ModeloAnclaje.ListarAnclaje(Anclajes,serial,ordenar);
         DefaultTableModel modeloTablaAnclaje = (DefaultTableModel) ventanaInicio.jTable3.getModel();
         for (int x = 0; x < Anclajes.size(); x++) {
             modeloTablaAnclaje.addRow(new Object[]{Anclajes.get(x).getSerial(), Anclajes.get(x).getContrato_luz(), Anclajes.get(x).getContrato_agua(), Anclajes.get(x).getServicio_limpieza(), Anclajes.get(x).getFecha_compra(), Anclajes.get(x).getDNI_socio(), Anclajes.get(x).getMatricula_barco(), Anclajes.get(x).getZona_zona()});
@@ -133,11 +143,63 @@ public class ControladorPagPrincipal implements ActionListener {
                 modelo.removeRow(i);
             }
             socios.clear();
-            modeloSocio.ListarSocios(socios);
+            String dni = "";
+            String ordenar ="";
+            if(ventanaInicio.jRadioButton3.isSelected()){
+                ordenar = " order by DNI;";
+                modeloSocio.ListarSocios(socios,dni,ordenar);
+            } else if(ventanaInicio.jRadioButton4.isSelected()){
+                ordenar = " order by nombre;";
+                modeloSocio.ListarSocios(socios,dni,ordenar);            
+            } else if(ventanaInicio.jRadioButton5.isSelected()){
+                ordenar = " order by telefono;";
+                modeloSocio.ListarSocios(socios,dni,ordenar);            
+            } else if(ventanaInicio.jRadioButton6.isSelected()){
+                ordenar = " order by fecha_alta;";
+                modeloSocio.ListarSocios(socios,dni,ordenar);            
+            }else{
+                ordenar = "";
+                modeloSocio.ListarSocios(socios,dni,ordenar);            
+            }
+            
             //DefaultTableModel modeloTablaSocio = (DefaultTableModel) ventanaInicio.jTable1.getModel();            
             for (int x = 0; x < socios.size(); x++) {
                 modelo.addRow(new Object[]{socios.get(x).getDNI(), socios.get(x).getNombre(), socios.get(x).getApellidos(), socios.get(x).getDireccion(), socios.get(x).getTelefono(), socios.get(x).getFecha_alta()});
             }
+
+        } else if (e.getSource() == ventanaInicio.jButton9) {
+
+            DefaultTableModel modelo = (DefaultTableModel) ventanaInicio.jTable1.getModel();
+            int filas = ventanaInicio.jTable1.getRowCount();
+            for (int i = filas -1; i > -1; i--) {
+                modelo.removeRow(i);
+            }
+            socios.clear();
+            String dni = ventanaInicio.jTextField12.getText();
+            String ordenar= "";
+            modeloSocio.ListarSocios(socios,dni,ordenar);
+            //DefaultTableModel modeloTablaSocio = (DefaultTableModel) ventanaInicio.jTable1.getModel();            
+            for (int x = 0; x < socios.size(); x++) {
+                modelo.addRow(new Object[]{socios.get(x).getDNI(), socios.get(x).getNombre(), socios.get(x).getApellidos(), socios.get(x).getDireccion(), socios.get(x).getTelefono(), socios.get(x).getFecha_alta()});
+            }
+            ventanaInicio.jTextField12.setText(null);
+
+        } else if (e.getSource() == ventanaInicio.jButton11) {
+
+            DefaultTableModel modelo = (DefaultTableModel) ventanaInicio.jTable3.getModel();
+            int filas = ventanaInicio.jTable3.getRowCount();
+            for (int i = filas -1; i > -1; i--) {
+                modelo.removeRow(i);
+            }
+            Anclajes.clear();
+            String anclaje = ventanaInicio.jTextField14.getText();
+            String ordenar= "";
+            ModeloAnclaje.ListarAnclaje(Anclajes,anclaje,ordenar);
+            //DefaultTableModel modeloTablaSocio = (DefaultTableModel) ventanaInicio.jTable1.getModel();            
+            for (int x = 0; x < Anclajes.size(); x++) {
+            modelo.addRow(new Object[]{Anclajes.get(x).getSerial(), Anclajes.get(x).getContrato_luz(), Anclajes.get(x).getContrato_agua(), Anclajes.get(x).getServicio_limpieza(), Anclajes.get(x).getFecha_compra(), Anclajes.get(x).getDNI_socio(), Anclajes.get(x).getMatricula_barco(), Anclajes.get(x).getZona_zona()});
+            }
+            ventanaInicio.jTextField14.setText(null);
 
         } else if (e.getSource() == ventanaInicio.jButton4) {
 
@@ -147,9 +209,80 @@ public class ControladorPagPrincipal implements ActionListener {
                 modeloBorrarBarco.removeRow(i);
             }
             barcos.clear();
-            modeloBarco.listarBarcos(barcos);
+            String matricula="";
+            String DNI="";
+            String ordenar ="";
+            if(ventanaInicio.jRadioButton7.isSelected()){
+                ordenar=" order by bar.matricula";
+            } else if(ventanaInicio.jRadioButton8.isSelected()){
+                ordenar=" order by bar.tipo";
+            } else if(ventanaInicio.jRadioButton9.isSelected()){
+                ordenar=" order by soc.DNI";
+            } else if(ventanaInicio.jRadioButton10.isSelected()){
+                ordenar=" order by bar.nombre";
+            }
+            modeloBarco.listarBarcos(barcos,matricula,DNI,ordenar);
             for (int x = 0; x < barcos.size(); x++) {
                 modeloBorrarBarco.addRow(new Object[]{barcos.get(x).getMatricula(), barcos.get(x).getNombre(), barcos.get(x).getTipo(), barcos.get(x).getCapacidad(), barcos.get(x).getDNI()});
+            }
+
+        } else if (e.getSource() == ventanaInicio.jButton10) {
+
+            DefaultTableModel modeloBorrarBarco = (DefaultTableModel) ventanaInicio.jTable2.getModel();
+            int filas = ventanaInicio.jTable2.getRowCount();
+            for (int i = filas -1; i > -1; i--) {
+                modeloBorrarBarco.removeRow(i);
+            }
+            barcos.clear();
+            String matricula= ventanaInicio.jTextField13.getText();
+            String DNI="";
+            String ordenar ="";
+            modeloBarco.listarBarcos(barcos,matricula,DNI,ordenar);
+            for (int x = 0; x < barcos.size(); x++) {
+                modeloBorrarBarco.addRow(new Object[]{barcos.get(x).getMatricula(), barcos.get(x).getNombre(), barcos.get(x).getTipo(), barcos.get(x).getCapacidad(), barcos.get(x).getDNI()});
+            }
+            ventanaInicio.jTextField13.setText(null);
+
+        } else if (e.getSource() == ventanaInicio.jButton12) {
+
+            DefaultTableModel modeloBorrarBarco = (DefaultTableModel) ventanaInicio.jTable2.getModel();
+            int filas = ventanaInicio.jTable2.getRowCount();
+            for (int i = filas -1; i > -1; i--) {
+                modeloBorrarBarco.removeRow(i);
+            }
+            barcos.clear();
+            String matricula= "";
+            String DNI= ventanaInicio.jTextField15.getText();
+            String ordenar ="";
+            modeloBarco.listarBarcos(barcos,matricula,DNI,ordenar);
+            for (int x = 0; x < barcos.size(); x++) {
+                modeloBorrarBarco.addRow(new Object[]{barcos.get(x).getMatricula(), barcos.get(x).getNombre(), barcos.get(x).getTipo(), barcos.get(x).getCapacidad(), barcos.get(x).getDNI()});
+            }
+            ventanaInicio.jTextField15.setText(null);
+
+        } else if (e.getSource() == ventanaInicio.jButton13) {
+
+            DefaultTableModel modelo = (DefaultTableModel) ventanaInicio.jTable3.getModel();
+            int filas = ventanaInicio.jTable3.getRowCount();
+            for (int i = filas -1; i > -1; i--) {
+                modelo.removeRow(i);
+            }
+            Anclajes.clear();
+            String serial = "";
+            String ordenar="";
+            if(ventanaInicio.jRadioButton11.isSelected()){
+                ordenar=" order by serial;";
+            } else if(ventanaInicio.jRadioButton12.isSelected()){
+               ordenar=" order by zona_zona;"; 
+            } else if(ventanaInicio.jRadioButton13.isSelected()){
+               ordenar=" order by matricula_barco;"; 
+            } else if(ventanaInicio.jRadioButton14.isSelected()){
+               ordenar=" order by DNI_socio;"; 
+            }
+            
+            ModeloAnclaje.ListarAnclaje(Anclajes, serial,ordenar);
+            for (int x = 0; x < Anclajes.size(); x++) {
+            modelo.addRow(new Object[]{Anclajes.get(x).getSerial(), Anclajes.get(x).getContrato_luz(), Anclajes.get(x).getContrato_agua(), Anclajes.get(x).getServicio_limpieza(), Anclajes.get(x).getFecha_compra(), Anclajes.get(x).getDNI_socio(), Anclajes.get(x).getMatricula_barco(), Anclajes.get(x).getZona_zona()});
             }
 
         } else if (e.getSource() == ventanaInicio.jButton7) {

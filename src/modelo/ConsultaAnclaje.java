@@ -49,12 +49,21 @@ public class ConsultaAnclaje extends Conexion {
         }
     }
     
-    public ArrayList<Anclaje> ListarSocios(ArrayList<Anclaje> anclajes) {
+    public ArrayList<Anclaje> ListarAnclaje(ArrayList<Anclaje> anclajes,String serial,String ordenar) {
         Connection conexion = getConnection();
         try {
             conexion = getConnection();
             int contador = 0;
+            
+            if(!"".equals(serial)){
+            ps = conexion.prepareStatement("select * from anclaje where serial=?");
+            ps.setString(1, serial);
+            }else if(!"".equals(ordenar)){
+            ps = conexion.prepareStatement("select * from anclaje" + ordenar);
+            }else{
             ps = conexion.prepareStatement("select * from anclaje;");
+            }
+            
             rs = ps.executeQuery();
 
             while (rs.next()) {

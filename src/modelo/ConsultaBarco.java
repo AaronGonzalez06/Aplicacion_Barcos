@@ -47,12 +47,22 @@ public class ConsultaBarco extends Conexion {
     }
     
     
-    public ArrayList<Barco> listarBarcos(ArrayList<Barco> barcos) {
+    public ArrayList<Barco> listarBarcos(ArrayList<Barco> barcos,String matricula,String DNI,String ordenar) {
         Connection conexion = getConnection();
         try {
             conexion = getConnection();
             int contador = 0;
+            if(!"".equals(matricula)){
+            ps = conexion.prepareStatement("select bar.matricula as matricula, bar.nombre as nombre, bar.tipo as tipo , bar.capacidad as capacidad , soc.DNI as DNI from barco bar inner join anclaje anc on anc.matricula_barco = bar.matricula inner join socio soc on soc.DNI = anc.DNI_socio where bar.matricula = ? ;");
+            ps.setString(1, matricula);
+            }else if(!"".equals(DNI)){
+            ps = conexion.prepareStatement("select bar.matricula as matricula, bar.nombre as nombre, bar.tipo as tipo , bar.capacidad as capacidad , soc.DNI as DNI from barco bar inner join anclaje anc on anc.matricula_barco = bar.matricula inner join socio soc on soc.DNI = anc.DNI_socio where soc.DNI = ? ;");
+            ps.setString(1, DNI);
+            }else if(!"".equals(ordenar)){
+            ps = conexion.prepareStatement("select bar.matricula as matricula, bar.nombre as nombre, bar.tipo as tipo , bar.capacidad as capacidad , soc.DNI as DNI from barco bar inner join anclaje anc on anc.matricula_barco = bar.matricula inner join socio soc on soc.DNI = anc.DNI_socio" + ordenar);            
+            }else{
             ps = conexion.prepareStatement("select bar.matricula as matricula, bar.nombre as nombre, bar.tipo as tipo , bar.capacidad as capacidad , soc.DNI as DNI from barco bar inner join anclaje anc on anc.matricula_barco = bar.matricula inner join socio soc on soc.DNI = anc.DNI_socio;");
+            }            
             rs = ps.executeQuery();
 
             while (rs.next()) {
